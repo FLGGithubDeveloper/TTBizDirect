@@ -1,0 +1,1 @@
+console.error("SyntaxError: C:/Users/FLGAdministrator/Downloads/ParseReact-master/demos/todo/js/ReviewList.react.js: Unexpected token (7:17) while parsing file: C:\\Users\\FLGAdministrator\\Downloads\\ParseReact-master\\demos\\todo\\js\\ReviewList.react.js");
