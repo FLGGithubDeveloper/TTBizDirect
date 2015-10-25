@@ -13,31 +13,7 @@ var SearchBar = require('./SearchBar.react.js');
 var NavBar = require('./NavBar.react.js');
 
 
-/*export default class HomePage extends ParseComponent
-{
-    observe(props,state){
-        return{
-            categories: new Parse.Query('BusinessCategory').ascending('frequency')
-        };
-    }
-    render() {
-        return (
-            <div>
-                <Header text="Categories" back="false"/>
-                <SearchBar searchKey={this.props.searchKey} searchHandler={this.props.searchHandler}/>
-                <div className="content">
-                    <CategoryList />
-                </div>
-                <NavBar />
-            </div>
-        );
-    }
-};*/
-
-
 var HomePage = React.createClass({
-
-    //this.setState({businessId: this.props.business.objectId});
 
     render: function (){
         return (
@@ -57,11 +33,12 @@ var HomePage = React.createClass({
 var CategoryPage = React.createClass({
 
     render: function (){
+        //console.log(this.props.categoryId)
         return (
             <div>
             <Header text="Category" back="true"/>
                 <div className="content">
-                    <BusinessList categoryId={this.props.categoryId}/>
+                    <BusinessList categoryId={this.props.categoryId.substr(1)}/>
                 </div>
                 <NavBar />                                
             </div>
@@ -74,60 +51,38 @@ var CategoryPage = React.createClass({
 
 export default class BusinessPage extends ParseComponent
 {
+
     observe(props,state){
+        var id = this.props.businessId.substr(1);
         return{
-            business: new Parse.Query('Business').equalTo("objectId", this.props.businessId)
+            business: new Parse.Query('Business').equalTo("objectId", id)
         };
     }
 
-    render() {        
+    render() { 
+           
         return (
+
             <div>
-                <Header text={this.data.business.objectId} back="true"/>
-                
-                //<NavBar />                                
-            </div>
-            
+                <Header text="Business" back="true"/>
+                    <div className="content">                
+                        <ul className = "table-view">
+                            {this.data.business.map(function (business){
+                            return [
+                                <li className="table-view-cell">Name: {business.name}</li>,
+                                <li className="table-view-cell">Address: {business.street}, {business.city} </li>,
+                                <li className="table-view-cell">Phone: {business.phone} </li>,
+                                <li className="table-view-cell"><a href={business.website}>Website: {business.website} </a></li>
+                            ];
+                            },this)}             
+                        </ul>                                  
+                    </div>
+                <NavBar />
+            </div> 
         );
     }
 
 };
-
-/*var CategoryPage = React.createClass({
-    getInitialState: function() {
-        return {
-            category: {},
-            businesses: {}
-        };
-    },
-    componentDidMount: function() {
-        this.props.service.findById(this.props.categoryId).done(function(result) {
-            this.setState({category: result});
-        }.bind(this));
-        
-    },
-    render: function () {
-        return (
-            <div>
-            <Header text="Category" back="true"/>
-                <div className="card">
-                    <ul className="table-view">
-                        <li className="table-view-cell media">
-                            <img className="media-object big pull-left" src={"pics/" + this.state.category.name + ".jpg" }/>
-                            <h1>{this.state.category.name} </h1>
-                            <p>{this.state.category.frequency}</p>
-                        </li>                     
-                    </ul>               
-                </div>
-                <div className="content">
-                    <BusinessList businesses={this.state.businesses}/>
-                </div>                                
-            </div>
-            
-        );
-    }
-});*/
-
 
 var App = React.createClass({
     getInitialState: function() {
@@ -162,10 +117,10 @@ var App = React.createClass({
             this.setState({page: <HomePage /*searchKey={this.state.searchKey} searchHandler={this.searchHandler}*/ categories={this.state.categories}/>});
         }.bind(this));
         router.addRoute('categories/:id', function(id) {
-            this.setState({page: <CategoryPage categoryId={id}/>});
+            this.setState({page: <CategoryPage categoryId={id} />});
         }.bind(this));
         router.addRoute('businesses/:id', function(id) {
-            this.setState({page: <BusinessPage businessId={id}/>});
+            this.setState({page: <BusinessPage businessId={id} />});
         }.bind(this));
         router.start();
     },

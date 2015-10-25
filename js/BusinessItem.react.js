@@ -7,7 +7,7 @@ var BusinessItem = React.createClass({
     render: function (){
         return (
             <li className="table-view-cell">
-                <a href={"#businesses/" + this.props.business.objectId} className = "navigate-right">
+                <a href={"#businesses/:" + this.props.business.objectId} className = "navigate-right">
                 <span className="badge">{this.props.business.phone}</span>
                     {this.props.business.name}
                 </a>
